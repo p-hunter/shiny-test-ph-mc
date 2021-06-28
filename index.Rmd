@@ -4,7 +4,6 @@ output:
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: fill
-runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
@@ -17,12 +16,10 @@ source("test_mc.R")
 Column {data-width=350}
 -----------------------------------------------------------------------
 
-### Settings
+### Settings (currently unavailable)
 
 ```{r}
 
-sliderInput("nsim", "Number of Simulations", min = 1, max = 13, value = 3)
-sliderInput("iterations", "Number of Iterations", min = 100, max = 10000, value = 5000)
 
 
 ```
@@ -34,9 +31,11 @@ Column {data-width=650}
 
 ```{r}
 
-Data <- reactive({
-  Draw_MH(K = input$nsim, N = input$iterations)
-})
-renderPlot({plot_mh(Data())})
+#Data <- reactive({
+df <-  Draw_MH(K = 4, N = 10000)
+#})
+#renderPlot({
+ggplotly(plot_mh(df))
+#})
 
 ```
