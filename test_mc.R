@@ -1,6 +1,5 @@
 suppressWarnings(library(tidyverse)); library(magrittr); 
 
-options(repr.plot.width = 10, repr.plot.height = 5)
 
 mh_target <- function(theta) {
   dt(theta, 1)
@@ -11,14 +10,15 @@ plot_mh <- function(df) {
   plot_out <- df %>%
     ggplot(aes(x = Iteration, y = `Simulated Value`, colour = Draw)) +
     geom_line() +
-    labs(title = "Beep Boop Computerr ahahaha")
+    labs(title = "Metropolis-Hastings Draws") +
+    theme_bw()
   plot_out
 }
 
 
 Draw_MH <- function(N, K) {
   X <- matrix(1, nrow = N, ncol = K)
-  accepted <- rep(1, 3)
+  accepted <- rep(1, K)
   U <- runif(N * K, -10, 10) %>% matrix(nrow = N, ncol = K)
   for (i in 2:N) {
     for(j in 1:K) {
@@ -37,11 +37,7 @@ Draw_MH <- function(N, K) {
   X %>%
     as.data.frame() %>%
     set_colnames(paste0("Draw ", seq_len(K))) %>%
-    mutate(Iteration = 1:10000, .before = `Draw 1`) %>%
+    mutate(Iteration = 1:N, .before = `Draw 1`) %>%
     pivot_longer(-Iteration, names_to = "Draw", values_to = "Simulated Value") 
 }
 
-
-test  <- Draw_MH(10000, 3)
-
-test %>% plot_mh()

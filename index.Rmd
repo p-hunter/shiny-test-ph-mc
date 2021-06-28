@@ -1,36 +1,42 @@
 ---
-title: "Untitled"
+title: "MC Test - PH"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: fill
+runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
-```
-
-Column {data-width=650}
------------------------------------------------------------------------
-
-### Chart A
-
-```{r}
-
+library(shiny)
+library(plotly)
+source("test_mc.R")
 ```
 
 Column {data-width=350}
 -----------------------------------------------------------------------
 
-### Chart B
+### Settings
 
 ```{r}
 
+sliderInput("nsim", "Number of Simulations", min = 1, max = 13, value = 3)
+sliderInput("iterations", "Number of Iterations", min = 100, max = 10000, value = 5000)
+
+
 ```
 
-### Chart C
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Output
 
 ```{r}
 
-```
+Data <- reactive({
+  Draw_MH(K = input$nsim, N = input$iterations)
+})
+renderPlot({plot_mh(Data())})
 
+```
